@@ -13,6 +13,10 @@ export interface Accommodation {
   description: string;
   location: {lat: number;lng: number;};
   address: string;
+  unavailableDates?: string[];
+  minNights?: number;
+  host?: { name: string; avatar?: string; verified?: boolean; responseTime?: string };
+  reviewsList?: { id: string; author: string; rating: number; date: string; text: string }[];
 }
 
 export const accommodations: Accommodation[] = [
@@ -35,7 +39,14 @@ export const accommodations: Accommodation[] = [
   description:
   'Modern student living just steps away from the University of Mpumalanga. Features fully furnished rooms, secure 24/7 access, on-site parking, and a quiet environment perfect for studying.',
   location: { lat: -25.4658, lng: 30.9854 },
-  address: 'Near University of Mpumalanga, Mbombela'
+  address: 'Near University of Mpumalanga, Mbombela',
+  unavailableDates: ['2026-05-10','2026-05-11','2026-05-20'],
+  minNights: 28,
+  host: { name: 'Lerato', avatar: '', verified: true, responseTime: 'within 2 hours' },
+  reviewsList: [
+    { id: 'r1', author: 'Sipho', rating: 5, date: '2025-11-03', text: 'Great place, close to campus.' },
+    { id: 'r2', author: 'Aisha', rating: 4, date: '2025-09-21', text: 'Comfortable and quiet.' }
+  ]
 },
 {
   id: '2',
@@ -55,7 +66,10 @@ export const accommodations: Accommodation[] = [
   description:
   'Affordable student lodge in central Nelspruit with a friendly, social atmosphere. Includes high-speed WiFi, on-site laundry facilities, and round-the-clock security.',
   location: { lat: -25.4753, lng: 30.9694 },
-  address: 'Nelspruit Central, Mpumalanga'
+  address: 'Nelspruit Central, Mpumalanga',
+  unavailableDates: ['2026-05-02','2026-05-03'],
+  minNights: 14,
+  host: { name: 'Thandi', avatar: '', verified: false, responseTime: 'within 24 hours' }
 },
 {
   id: '3',
@@ -75,7 +89,10 @@ export const accommodations: Accommodation[] = [
   description:
   'Modern self-contained studios in Mbombela for students who value privacy and independence. Each unit comes fully furnished with its own kitchenette and dedicated parking bay.',
   location: { lat: -25.4858, lng: 30.9954 },
-  address: 'Mbombela, Mpumalanga'
+  address: 'Mbombela, Mpumalanga',
+  unavailableDates: [],
+  minNights: 30,
+  host: { name: 'Mark', avatar: '', verified: true, responseTime: 'within 1 hour' }
 },
 {
   id: '4',
@@ -95,5 +112,8 @@ export const accommodations: Accommodation[] = [
   description:
   'Budget-friendly shared rooms within walking distance of TVET College. Comes with a shared kitchen, secure entry, and reliable WiFi — ideal for students on a tight budget.',
   location: { lat: -25.4553, lng: 30.9594 },
-  address: 'Near TVET College, Nelspruit'
+  address: 'Near TVET College, Nelspruit',
+  unavailableDates: ['2026-05-15'],
+  minNights: 7,
+  host: { name: 'Nomsa', avatar: '', verified: false, responseTime: 'within 12 hours' }
 }];

@@ -14,6 +14,13 @@ import {
   Sofa,
   Navigation } from
 'lucide-react';
+import ImageGallery from '../components/ImageGallery';
+import ReserveCard from '../components/ReserveCard';
+import HostCard from '../components/HostCard';
+import Reviews from '../components/Reviews';
+import SimilarListings from '../components/SimilarListings';
+import Map from '../components/Map';
+import Policies from '../components/Policies';
 import { accommodations } from '../data/mockData';
 const amenityIcons: Record<string, React.ElementType> = {
   wifi: Wifi,
@@ -49,52 +56,22 @@ export function DetailPage() {
       className="min-h-screen bg-white relative pb-28 lg:pb-0">
       
       {/* Image Gallery */}
-      <div className="relative h-72 sm:h-96 lg:h-[480px] w-full bg-neutral-100">
-        <div
-          className="flex overflow-x-auto snap-x snap-mandatory h-full hide-scrollbar"
-          onScroll={(e) => {
-            const scrollLeft = (e.target as HTMLElement).scrollLeft;
-            const width = (e.target as HTMLElement).clientWidth;
-            setActiveImage(Math.round(scrollLeft / width));
-          }}>
-          
-          {acc.images.map((img, i) =>
-          <img
-            key={i}
-            src={img}
-            alt={`${acc.name} ${i + 1}`}
-            className="w-full h-full object-cover snap-center flex-shrink-0" />
+      <div className="relative w-full">
+        <ImageGallery images={acc.images} />
 
-          )}
-        </div>
-
-        {/* Top Actions */}
         <div className="absolute top-6 left-0 right-0 px-4 sm:px-8 flex justify-between items-center z-10 max-w-7xl mx-auto">
           <button
             onClick={() => navigate(-1)}
             className="w-10 h-10 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center shadow-sm text-neutral-800 hover:bg-white transition-colors">
-            
             <ChevronLeft className="w-6 h-6" />
           </button>
           <button
             onClick={() => setIsSaved(!isSaved)}
             className="w-10 h-10 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center shadow-sm text-neutral-800 hover:bg-white transition-colors"
             aria-label="Save">
-            
             <Heart
-              className={`w-5 h-5 transition-colors ${isSaved ? 'fill-red-600 text-red-600' : ''}`} />
-            
+              className={`w-5 h-5 transition-colors ${isSaved ? 'fill-brand text-brand' : ''}`} />
           </button>
-        </div>
-
-        {/* Dots */}
-        <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-1.5 z-10">
-          {acc.images.map((_, i) =>
-          <div
-            key={i}
-            className={`h-1.5 rounded-full transition-all ${i === activeImage ? 'w-4 bg-white' : 'w-1.5 bg-white/50'}`} />
-
-          )}
         </div>
       </div>
 
@@ -172,19 +149,7 @@ export function DetailPage() {
                 Near campus
               </h3>
               <div className="rounded-2xl overflow-hidden border border-neutral-200 bg-neutral-50">
-                <div
-                  className="h-40 sm:h-56 w-full relative bg-gradient-to-br from-neutral-100 to-neutral-200"
-                  style={{
-                    backgroundImage:
-                    'radial-gradient(circle at 20% 30%, rgba(220,38,38,0.08) 0, transparent 40%), radial-gradient(circle at 80% 70%, rgba(0,0,0,0.04) 0, transparent 40%)'
-                  }}>
-                  
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center shadow-lg shadow-red-600/30 ring-8 ring-red-600/10">
-                      <MapPin className="w-6 h-6 text-white" />
-                    </div>
-                  </div>
-                </div>
+                <Map location={acc.location} />
                 <div className="p-4 flex items-center space-x-3 bg-white">
                   <div className="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center flex-shrink-0">
                     <Navigation className="w-5 h-5" />
@@ -200,58 +165,40 @@ export function DetailPage() {
                 </div>
               </div>
             </div>
+
+            {/* Host card */}
+            <div className="mb-6">
+              <HostCard host={acc.host} />
+            </div>
+
+            {/* Reviews */}
+            <div className="mb-6">
+              <Reviews reviews={acc.reviewsList} />
+            </div>
+
+            {/* Similar listings */}
+            <div className="mb-6">
+              <SimilarListings currentId={acc.id} />
+            </div>
+
+            {/* Policies */}
+            <div className="mb-6">
+              <Policies />
+            </div>
           </div>
 
           {/* Desktop sidebar reserve card */}
           <aside className="hidden lg:block">
-            <div className="sticky top-8 bg-white rounded-2xl border border-neutral-200 shadow-sm p-6">
-              <div className="flex items-baseline mb-1">
-                <span className="text-3xl font-bold text-neutral-900">
-                  R{acc.price.toLocaleString()}
-                </span>
-                <span className="text-sm text-neutral-500 ml-1">/ month</span>
-              </div>
-              <div className="flex items-center text-sm text-neutral-500 mb-6">
-                <Star className="w-4 h-4 text-amber-400 fill-amber-400 mr-1" />
-                <span className="font-semibold text-neutral-800">
-                  {acc.rating}
-                </span>
-                <span className="mx-1.5">·</span>
-                <span>{acc.reviews} reviews</span>
-              </div>
-              <button
-                onClick={() => navigate(`/accommodation/${acc.id}/reserve`)}
-                className="w-full bg-red-600 hover:bg-red-700 text-white py-3.5 rounded-2xl font-bold text-sm shadow-lg shadow-red-600/30 transition-all active:scale-95">
-                
-                Reserve Now
-              </button>
-              <p className="text-xs text-neutral-400 text-center mt-3">
-                You won't be charged yet
-              </p>
+              <div className="sticky top-8">
+              <ReserveCard price={acc.price} minNights={acc.minNights} onInstantBook={(p) => { alert('Booked (mock)'); console.log('book', p); }} onRequest={(p) => { alert('Request sent (mock)'); console.log('request', p); }} unavailable={acc.unavailableDates} />
             </div>
           </aside>
         </div>
       </div>
 
-      {/* Sticky Bottom Bar (mobile/tablet only) */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-neutral-100 p-4 px-6 pb-6 shadow-[0_-10px_40px_rgba(0,0,0,0.05)] z-20 flex justify-between items-center">
-        <div>
-          <span className="text-sm text-neutral-500 font-medium block">
-            Price
-          </span>
-          <div className="flex items-baseline">
-            <span className="text-2xl font-bold text-neutral-900">
-              R{acc.price.toLocaleString()}
-            </span>
-            <span className="text-sm text-neutral-500 ml-1">/mo</span>
-          </div>
-        </div>
-        <button
-          onClick={() => navigate(`/accommodation/${acc.id}/reserve`)}
-          className="bg-red-600 hover:bg-red-700 text-white px-8 py-3.5 rounded-2xl font-bold text-sm shadow-lg shadow-red-600/30 transition-all active:scale-95">
-          
-          Reserve Now
-        </button>
+      {/* Sticky Bottom Reserve (mobile) */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-20 p-4">
+        <ReserveCard price={acc.price} onInstantBook={(p) => { alert('Booked (mock)'); }} onRequest={(p) => { alert('Request sent (mock)'); }} unavailable={acc.unavailableDates} />
       </div>
     </motion.div>);
 
